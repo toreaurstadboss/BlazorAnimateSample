@@ -1,7 +1,7 @@
 ﻿
 function RegisterAnimationStartupTrigger(wrapperAnimationElementId, triggerElementId, triggerEventId) {
     //debugger
-    if (event != null && event.target != null && event.target != undefined) {
+    if (event != null && event.target != null && event.target != undefined && event.target.closest) {
         var closestParentDiv = event.target.closest('div');
         if (closestParentDiv != null && closestParentDiv.id == wrapperAnimationElementId) {
 
@@ -27,7 +27,7 @@ function RegisterAnimationStartupTrigger(wrapperAnimationElementId, triggerEleme
 
 function AddAosAnimateCssClass(elem, triggerEventId, wrapperAnimationElementId) {
     //debugger
-    if (event != null && event.target != null && event.target != undefined) {
+    if (event != null && event.target != null && event.target != undefined && event.target.closest) {
         var closestParentDiv = event.target.closest('div');
         if (closestParentDiv != null && closestParentDiv.id == wrapperAnimationElementId) {
 
@@ -52,4 +52,11 @@ function AddAosAnimateCssClass(elem, triggerEventId, wrapperAnimationElementId) 
         elem.classList.add('aos-init');
         elem.classList.add('aos-animate');
     }, 500);
+}
+
+function RestartAosEventToImplicitEventDomContentLoaded() {
+    AOS.init({
+        easing: 'ease-in-out',
+        startEvent: 'DOMContentLoaded'
+    });
 }
