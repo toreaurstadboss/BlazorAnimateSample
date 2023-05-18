@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
 
 <div class="page">
     <div class="sidebar">
@@ -15,3 +16,16 @@
         </article>
     </main>
 </div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        base.OnAfterRenderAsync(firstRender);
+        await JS.InvokeAsync<string>("RegisterAnimationStartupTrigger");
+        await JS.InvokeAsync<string>("AddAosAnimateCssClass");
+    }
+
+
+
+
+}
