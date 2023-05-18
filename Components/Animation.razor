@@ -1,5 +1,5 @@
 ﻿@inject IJSRuntime JsRuntime
-<div id="@_wrapperDivUniqueId" data-aos="@AnimationName" data-aos-delay="@Delay" data-aos-duration="@Duration">
+<div id="@_wrapperDivUniqueId" data-aos="@SelectedAnimation.GetDisplayName()" data-aos-delay="@Delay" data-aos-duration="@Duration">
   @ChildContent
 </div>
 
@@ -22,10 +22,10 @@
     public int Delay { get; set; } = 50;
 
     /// <summary>
-    /// Animation to use. Use name list defined in AosConstants.Animations. See here: <see cref="AosConstants.Animations" /> for a list of supported Animations.
+    /// Animation to use. Use name list defined in Animations. See here: <see cref="AnimationNames" /> for a list of supported Animations.
     /// </summary>
     [Parameter]
-    public string AnimationName { get; set; } = AosConstants.Animations.fade;
+    public AnimationNames SelectedAnimation { get; set; } = AnimationNames.Fade;
 
     /// <summary>
     /// DOM id of the element that will trigger the animation. If not set, the animation will happed as default, when element scrolls into view according to AOS standard
@@ -69,9 +69,9 @@
         {
             Delay = 3000;
         }
-        if (string.IsNullOrWhiteSpace(AnimationName))
+        if (string.IsNullOrWhiteSpace(SelectedAnimation.GetDisplayName()))
         {
-            AnimationName = AosConstants.Animations.fade;
+            SelectedAnimation = AnimationNames.Fade;
         }       
     }
 

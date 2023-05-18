@@ -3,7 +3,7 @@
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<h1>Counter with Blazor animations</h1>
 
 <p role="status">Current count: @currentCount</p>
 
@@ -11,7 +11,7 @@
     Check here to start the animation [TriggerElementId: CheckboxToggleViaSpecificJsEvent, TriggerEventId: change]
 <br />
 <br />
-<Animation Duration="1000" AnimationName="@AosConstants.Animations.fade" TriggerElementId="CheckboxToggleViaSpecificJsEvent" TriggerEventId="change">
+<Animation Duration="1000" SelectedAnimation="@AnimationNames.Fade" TriggerElementId="CheckboxToggleViaSpecificJsEvent" TriggerEventId="change">
     <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 </Animation>
 <br />
@@ -19,9 +19,32 @@
 
 
 <button @onclick="AOSRestartStartEvent" class="btn btn-outline-success">
-    Click here to reset AOS start event to DOMContentLoaded
+    Click here to enable AOS start event to DOMContentLoaded
 </button>
 <br /><br />
+
+<button @onclick="AOSCustomStartEvent" class="btn btn-outline-success">
+    Click here to disable AOS start event to DOMContentLoaded (custom start event)
+</button>
+<br />
+<br />
+
+<hr />
+
+<label>
+    <h5 class="text-muted">
+        Select the animation to show when button is visible
+        <InputSelect @bind-Value="SelectedAnimation">
+            @foreach (var item in Enum.GetValues(typeof(AnimationNames)).Cast<AnimationNames>())
+            {
+                <option value="@item">@item.GetDisplayName()</option>                
+            }
+
+        </InputSelect>
+    </h5>
+</label>
+
+<br />
 
 <label>  
  <InputCheckbox @bind-Value="@showAnotherCurrentCountBtn" />
@@ -29,8 +52,8 @@
 </label>
 
 @if (showAnotherCurrentCountBtn){
-    <Animation Duration="1000" AnimationName="@AosConstants.Animations.fade_left">
-        <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <Animation Duration="1000" SelectedAnimation="@SelectedAnimation">
+        <button class="btn btn-outline-primary" @onclick="IncrementCount">Click me</button>
     </Animation>
 }
 <br />
@@ -39,6 +62,8 @@
 @code {
     private int currentCount = 0;
     private bool showAnotherCurrentCountBtn = false;
+
+    private AnimationNames SelectedAnimation = AnimationNames.Fade;
 
 
     private void IncrementCount()
@@ -49,6 +74,11 @@
     private async Task AOSRestartStartEvent()
     {
         await JS.InvokeAsync<string>("RestartAosEventToImplicitEventDomContentLoaded");
+    }
+
+    private async Task AOSCustomStartEvent()
+    {
+        await JS.InvokeAsync<string>("DisableAosEventToImplicitEventDomContentLoaded");
     }
 
 }

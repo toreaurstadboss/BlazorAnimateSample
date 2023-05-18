@@ -60,3 +60,10 @@ function RestartAosEventToImplicitEventDomContentLoaded() {
         startEvent: 'DOMContentLoaded'
     });
 }
+
+function DisableAosEventToImplicitEventDomContentLoaded() {
+    AOS.init({
+        easing: 'ease-in-out',
+        startEvent: 'MyCustomEvent'
+    });
+}
