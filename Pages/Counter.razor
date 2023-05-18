@@ -1,0 +1,28 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<input type="checkbox" id="StartButton" />
+    Check here to start the animation
+
+
+<br />
+<br />
+
+<Animation Duration="1000" AnimationName="@AosConstants.Animations.fade" TriggerElementId="StartButton" TriggerEventId="change">
+
+    <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+</Animation>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

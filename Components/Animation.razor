@@ -1,0 +1,78 @@
+﻿@inject IJSRuntime JsRuntime
+<div id="@_wrapperDivUniqueId" data-aos="@AnimationName" data-aos-delay="@Delay" data-aos-duration="@Duration">
+  @ChildContent
+</div>
+
+@code {
+    private string _wrapperDivUniqueId = $"wrapperDiv_{Guid.NewGuid().ToString("N")}";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Duration must be set between 50 to 3000 ms, see defined limit here : https://github.com/michalsnik/aos
+    /// </summary>
+    [Parameter]
+    public int Duration { get; set; } = 1000;
+
+    /// <summary>
+    /// Delay must be set between 0 to 3000 ms, see defined limit here: https://github.com/michalsnik/aos
+    /// </summary>
+    [Parameter]
+    public int Delay { get; set; } = 50;
+
+    /// <summary>
+    /// Animation to use. Use name list defined in AosConstants.Animations. See here: <see cref="AosConstants.Animations" /> for a list of supported Animations.
+    /// </summary>
+    [Parameter]
+    public string AnimationName { get; set; } = AosConstants.Animations.fade;
+
+    /// <summary>
+    /// DOM id of the element that will trigger the animation. If not set, the animation will happed as default, when element scrolls into view according to AOS standard
+    /// </summary>
+    [Parameter]
+    public string? TriggerElementId { get; set; }
+
+    /// <summary>
+    /// DOM event for the element that will trigger the animation. See https://www.w3schools.com/jsref/dom_obj_event.asp for a list of DOM events. If not set, the animation will happen as default, when the element scrolls into view according to AOS standard.
+    /// </summary>
+    [Parameter]
+    public string? TriggerEventId { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!string.IsNullOrWhiteSpace(TriggerElementId) && !string.IsNullOrWhiteSpace(TriggerEventId))
+        {
+            //turn off automatic animation on scroll for the element
+
+            await JsRuntime.InvokeAsync<string>("RegisterAnimationStartupTrigger", new[] {
+                _wrapperDivUniqueId, TriggerElementId, TriggerEventId });
+        }
+    }
+
+
+    protected override void OnParametersSet()
+    {
+        if (Duration < 50)
+        {
+            Duration = 50;
+        } 
+        else if (Duration > 3000)
+        {
+            Duration = 3000;
+        }
+        if (Delay < 0)
+        {
+            Delay = 0;
+        }
+        else if (Delay > 3000)
+        {
+            Delay = 3000;
+        }
+        if (string.IsNullOrWhiteSpace(AnimationName))
+        {
+            AnimationName = AosConstants.Animations.fade;
+        }       
+    }
+
+}
