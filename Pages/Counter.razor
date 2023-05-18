@@ -39,7 +39,6 @@
             {
                 <option value="@item">@item.GetDisplayName()</option>                
             }
-
         </InputSelect>
     </h5>
 </label>
@@ -52,7 +51,7 @@
 </label>
 
 @if (showAnotherCurrentCountBtn){
-    <Animation Duration="1000" SelectedAnimation="@SelectedAnimation">
+    <Animation Duration="1500" SelectedAnimation="@SelectedAnimation" Delay="50">
         <button class="btn btn-outline-primary" @onclick="IncrementCount">Click me</button>
     </Animation>
 }
