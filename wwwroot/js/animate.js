@@ -1,18 +1,46 @@
 ﻿
 function RegisterAnimationStartupTrigger(wrapperAnimationElementId, triggerElementId, triggerEventId) {
     //debugger
+    if (event != null && event.target != null && event.target != undefined) {
+        var closestParentDiv = event.target.closest('div');
+        if (closestParentDiv != null && closestParentDiv.id == wrapperAnimationElementId) {
+
+            //sub elements of the wrapper div should not trigger animation, to avoid AOS running animation again
+            return;
+        }
+    }
+    
     var elem = document.getElementById(wrapperAnimationElementId);
+    if (elem == null || elem == undefined) {
+        return;
+    }
+    var triggerElement = document.getElementById(triggerElementId);
+    if (triggerElement == null || triggerElement == undefined) {
+        return;
+    }
+
     elem.classList.remove('aos-init'); //remove aos-animate class to avoid auto loading animation on scroll
     elem.classList.remove('aos-animate'); //remove aos-animate class to avoid auto loading animation on scroll
-    var triggerElement = document.getElementById(triggerElementId);
-    triggerElement.addEventListener(triggerEventId, function () { AddAosAnimateCssClass(elem, triggerEventId); }); //remove aos-animate class to avoid auto loading animation on scroll
+
+    triggerElement.addEventListener(triggerEventId, function () { AddAosAnimateCssClass(elem, triggerEventId, wrapperAnimationElementId); }); //remove aos-animate class to avoid auto loading animation on scroll
 }
 
-function AddAosAnimateCssClass(el, triggerEventId) {
-    debugger
+function AddAosAnimateCssClass(elem, triggerEventId, wrapperAnimationElementId) {
+    //debugger
+    if (event != null && event.target != null && event.target != undefined) {
+        var closestParentDiv = event.target.closest('div');
+        if (closestParentDiv != null && closestParentDiv.id == wrapperAnimationElementId) {
 
-    el.classList.remove('aos-init');
-    el.classList.remove('aos-animate');
+            //sub elements of the wrapper div should not trigger animation, to avoid AOS running animation again
+            return;
+        }
+    }
+    if (elem == null || elem == undefined) {
+        return;
+    }
+
+    elem.classList.remove('aos-init');
+    elem.classList.remove('aos-animate');
 
     if (triggerEventId.toLowerCase() == 'change') {
         if (!event.target.checked) {
@@ -21,7 +49,7 @@ function AddAosAnimateCssClass(el, triggerEventId) {
     }
 
     setTimeout(function () {
-        el.classList.add('aos-init');
-        el.classList.add('aos-animate');
+        elem.classList.add('aos-init');
+        elem.classList.add('aos-animate');
     }, 500);
 }
